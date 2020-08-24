@@ -123,17 +123,17 @@ int main(){
 	printf("\n");
 	while (multiply != 0)
 	{
-		current_digit = multiply % 10;
-		current_multiply = number * current_digit * current_multiply_column;
-		sprintf( print_format, "	| @ %%%dd\n", current_print_space--);
-		printf( print_format, current_multiply / current_multiply_column);
-		total_result += current_multiply;
+		digit = multiply % 10;
+		current_multiply = number * digit * current_multiply_column;
+		sprintf( print_format, "	| @ %%%dd\n", currnet_print_space--);
+		printf( print_format, current_multiply / x);
+		result += current_multiply;
 
 		current_multiply_column *= 10;
 		multiply /= 10;
 	}
 	printf("	| @ ------\n");
-	printf("	| @ %d\n\n", total_result);
+	printf("	| @ %d\n\n", result);
 
 	return SUCCESS;
 }
