@@ -19,17 +19,18 @@ enum STATUS{
 // Local functions
 /////////////////////////////////////////////////////
 /**
- * @fn int check_column( int val)
+ * @fn int check_column( const int val)
  * @brief 숫자의 자리수를 검사하는 함수, 기존에 입력 자리수가 정해져 있다.
  * @param val 입력받은 정수
  * @return 검사 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
  */
-int check_column( int val){
+int check_column( const int val){
+	int temp_val = val;
 	int return_value = FAIL;
 	int column_count = 0;
 
-	while(val != 0){
-		val = val / 10;
+	while( temp_val != 0){
+		temp_val = temp_val / 10;
 		column_count++;
 	}
 
