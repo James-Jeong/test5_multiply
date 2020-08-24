@@ -27,4 +27,5 @@ int main(void)
 		multiply /= 10;
 	}
 	printf("------\n%d\n\n", result);
+	return 0;
 }
