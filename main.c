@@ -3,85 +3,138 @@
 /////////////////////////////////////////////////////
 // Definitions & Macros
 /////////////////////////////////////////////////////
-#define MAX_LINE	4
+/** 숫자 입력 고정 자리수 */
+#define FIXED_COLUMN	3
+/** 곱셉 중간 과정 출력 라인 최대 개수 */
+#define MAX_LINE		4
+
+/** 함수 반환값 열거형 */
+enum STATUS{
+	UNKNOWN		= -1,	/** 알 수 없는 값 입력 */
+	FAIL		= 0,	/** 실패 */
+	SUCCESS,			/** 성공 */
+};
 
 /////////////////////////////////////////////////////
 // Local functions
 /////////////////////////////////////////////////////
+/**
+ * @fn int check_column( int val)
+ * @brief 숫자의 자리수를 검사하는 함수, 기존에 입력 자리수가 정해져 있다.
+ * @param val 입력받은 정수
+ * @return 검사 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
+ */
+int check_column( int val){
+	int return_value = FAIL;
+	int column_count = 0;
 
+	while(val != 0){
+		val = val / 10;
+		column_count++;
+	}
+
+	if( column_count == FIXED_COLUMN){
+		return_value = SUCCESS;
+	}
+
+	return return_value;
+}
+
+/**
+ * @fn int input_number( int *val)
+ * @brief 숫자를 입력받고 자리수를 확인하는 함수 
+ * @param val 입력받을 int형 정수
+ * @return 입력 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
+ */
+int input_number( int *val){
+	int return_value_input = scanf( "%d", val);
+	int return_value_column = FAIL;
+
+	if( return_value_input == FAIL){
+		printf("\t| ! 입력 오류, 문자열 입력\n");
+		while( getchar() != '\n');
+		return return_value_input;
+	}
+
+	return_value_column = check_column( *val);
+	if( return_value_column == FAIL){
+		printf("\t| ! 입력 오류, 자리수 불일치\n");
+	}
+	return return_value_column;
+}
+
+/**
+ * @fn void input_numbers( int *number, int *multiply)
+ * @brief 곱셈에 필요한 두 숫자를 입력받는 함수
+ * @param number 곱해지는 값
+ * @param multiply 곱하는 값
+ * @return 입력 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
+ */
+void input_numbers( int *number, int *multiply){
+	int return_value = FAIL;
+
+	// 곱해지는 값 입력
+	do
+	{
+		printf("\t| @ 곱해지는 값 입력 (3자리수)\t: ");
+		return_value = input_number( number);
+	}
+	while(return_value != SUCCESS);
+
+	// 곱하는 값 입력
+	do
+	{
+		printf("\t| @ 곱하는 값 입력 (3자리수)\t: ");
+		return_value = input_number( multiply);
+	}
+	while(return_value != SUCCESS);
+}
 
 /////////////////////////////////////////////////////
 // Main function
 /////////////////////////////////////////////////////
 /**
- * @fn 
- * @brief
- * @param 
- * @return 
+ * @fn int main()
+ * @brief 두 숫자를 입력받아 곱셈 중간 과정과 결과를 출력하는 프로그램
+ * @return SUCCESS
  */
 int main(){
-	int loop_index = 0;
-	int return_value = 0;
-	int is_get_first_number = 0, is_get_second_number = 0;
-	int first_number = 0, second_number = 0;
-	int temp_sec_number[MAX_LINE];
-	int result[MAX_LINE];
+	// 곱해지는 값, 곱하는 값
+	int number = 0, multiply = 0;
+	// 곱하는 값의 현재 자리수의 숫자
+	int digit = 0;
+	// 곱하는값의 현재 자리수의 숫자와 곱해지는 값과 곱한 값
+	int m = 0;
+	// 곱하는 값의 현재 자리수
+	int x = 1;
+	// m 을 출력할 때 출력할 자리수
+	int p = 6;
+	// 곱하는 값과 곱해지는 값을 곱한 값(최종 곱셈 값)
+	int result = 0;
+	// m 을 출력할 때의 출력 양식
+	char format[32] ={0,};
 
-	while( 1){
-		if( is_get_first_number == 0){
-			printf("\t| @ 첫 번쨰 숫자 입력 : ");
-			return_value = scanf( "%d", &first_number);
-			if( return_value == 0){
-				continue;
-			}
-			is_get_first_number++;
-		}
+	// 1. 곱셈에 사용될 두 숫자를 입력받는다.
+	printf("\n\t| @ 곱셈 출력 프로그램\n");
+	printf("\t| @ (세자리수의 두 숫자 곱셈)\n\n");
+	input_numbers( &number, &multiply);
 
-		if( is_get_second_number == 0){
-			printf("\t| @ 두 번쨰 숫자 입력 : ");
-			return_value = scanf( "%d", &second_number);
-			if( return_value == 0){
-				continue;
-			}
-			is_get_second_number++;
-		}
-
-		if( is_get_first_number > 0 && is_get_second_number > 0) break;
-	}
-
-	// line 5
-	temp_sec_number[2] = second_number;
-	temp_sec_number[2] /= 100;
-	result[2] = first_number * temp_sec_number[2];
-	temp_sec_number[2] *= 100;
-
-	// line 4
-	temp_sec_number[1] = second_number;
-	temp_sec_number[1] /= 10;
-	temp_sec_number[1] *= 10;
-	temp_sec_number[1] -= temp_sec_number[2];
-	temp_sec_number[1] /= 10;
-	result[1] = first_number * temp_sec_number[1];
-	temp_sec_number[1] *= 10;
-
-	// line 3
-	temp_sec_number[0] = second_number;
-	temp_sec_number[0] -= temp_sec_number[1] + temp_sec_number[2];
-	result[0] = first_number * temp_sec_number[0];
-
-	// line 6
-	result[3] = first_number * second_number;
-
-	for( ; loop_index < 3; loop_index++){
-		printf("%d\n", temp_sec_number[loop_index]);
-	}
-
+	// 2. 곱셈을 실시하고, 중간 과정과 최종 결과를 출력한다.
 	printf("\n");
+	while (multiply != 0)
+	{
+		digit = multiply % 10;
+		m = number * digit * x;
+		sprintf(format, "	| @ %%%dd\n", p--);
+		printf(format, m / x);
+		result += m;
 
-	for( loop_index = 0; loop_index < 4; loop_index++){
-		printf("%d\n", result[loop_index]);
+		x *= 10;
+		multiply /= 10;
 	}
+	printf("	| @ ------\n");
+	printf("	| @ %d\n\n", result);
 
-	return 1;
+	return SUCCESS;
 }
 
