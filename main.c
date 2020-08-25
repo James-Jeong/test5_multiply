@@ -30,16 +30,9 @@ void input_numbers( int *number, int *multiply);
  * @fn int check_column( const int val)
  * @brief 숫자의 자리수를 검사하는 함수, 기존에 입력 자리수가 정해져 있다.
  * @param val 입력받은 정수
- * @return 검사 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
+ * @return 정수의 자리수가 지정된 자리수와 동일하면 SUCCESS, 아니면 FAIL 반환
  */
 int check_column( const int val){
-	if( val == 0){
-#if DEBUG
-		printf("\t| ! 0 에 대한 자리수 검사 불가능 in check_column function.\n");
-#endif
-		return FAIL;
-	}
-
 	int temp_val = val;
 	int return_value = FAIL;
 	int column_count = 0;
@@ -60,7 +53,7 @@ int check_column( const int val){
  * @fn void input_number( int *val)
  * @brief 숫자를 입력받고 자리수를 확인하는 함수 
  * @param val 입력받을 int형 정수
- * @return 입력 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
+ * @return 반환값 없음
  */
 void input_number( int *val, char *msg){
 	if( val == NULL){
