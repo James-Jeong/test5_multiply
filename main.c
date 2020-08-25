@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 
 /////////////////////////////////////////////////////
 // Definitions & Macros
@@ -20,6 +21,11 @@ enum STATUS{
 /////////////////////////////////////////////////////
 // Local functions
 /////////////////////////////////////////////////////
+
+int check_column( const int val);
+void input_number( int *val, char *msg);
+void input_numbers( int *number, int *multiply);
+
 /**
  * @fn int check_column( const int val)
  * @brief 숫자의 자리수를 검사하는 함수, 기존에 입력 자리수가 정해져 있다.
@@ -29,7 +35,7 @@ enum STATUS{
 int check_column( const int val){
 	if( val == 0){
 #if DEBUG
-		printf("\t| ! 0 에 대한 자리수 검사 불가능 in check_column function\n");
+		printf("\t| ! 0 에 대한 자리수 검사 불가능 in check_column function.\n");
 #endif
 		return FAIL;
 	}
@@ -51,33 +57,38 @@ int check_column( const int val){
 }
 
 /**
- * @fn int input_number( int *val)
+ * @fn void input_number( int *val)
  * @brief 숫자를 입력받고 자리수를 확인하는 함수 
  * @param val 입력받을 int형 정수
  * @return 입력 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
  */
-int input_number( int *val){
+void input_number( int *val, char *msg){
 	if( val == NULL){
 #if DEBUG
-		printf("\t| ! 알 수 없는 주소 참조(NULL) in input_number function\n");
+		printf("\t| ! 알 수 없는 주소 참조(NULL) in input_number function.\n");
 #endif
-		return FAIL;
+		return ;
 	}
 
-	int return_value_input = scanf( "%d", val);
+	int return_value_input = FAIL;
 	int return_value_column = FAIL;
 
-	if( return_value_input == FAIL){
-		printf("\t| ! 입력 오류, 문자열 입력\n");
-		while( getchar() != '\n');
-		return return_value_input;
+	do
+	{
+		printf("\t| @ %s\t입력 (3자리수)\t: ", msg);
+		return_value_input = scanf( "%d", val);
+		if( return_value_input == FAIL){
+			printf("\t| ! 입력 오류, 정수가 아닌 문자열 입력.\n");
+			while( getchar() != '\n');
+			continue;
+		}
+	
+		return_value_column = check_column( *val);
+		if( return_value_column == FAIL){
+			printf("\t| ! 입력 오류, 자리수 불일치.\n");
+		}
 	}
-
-	return_value_column = check_column( *val);
-	if( return_value_column == FAIL){
-		printf("\t| ! 입력 오류, 자리수 불일치\n");
-	}
-	return return_value_column;
+	while(( return_value_input != SUCCESS) || ( return_value_column != SUCCESS));
 }
 
 /**
@@ -85,33 +96,20 @@ int input_number( int *val){
  * @brief 곱셈에 필요한 두 숫자를 입력받는 함수
  * @param number 곱해지는 값
  * @param multiply 곱하는 값
- * @return 입력 성공 여부, 성공 시 SUCCESS, 실패 시 FAIL 반환
+ * @return 반환값 없음
  */
 void input_numbers( int *number, int *multiply){
 	if( number == NULL || multiply == NULL){
 #if DEBUG
-		printf("\t| ! 알 수 없는 주소 참조(NULL) in input_numbers function\n");
+		printf("\t| ! 알 수 없는 주소 참조(NULL) in input_numbers function.\n");
 #endif
 		return ;
 	}
 
-	int return_value = FAIL;
-
 	// 곱해지는 값 입력
-	do
-	{
-		printf("\t| @ 곱해지는 값 입력 (3자리수)\t: ");
-		return_value = input_number( number);
-	}
-	while(return_value != SUCCESS);
-
+	input_number( number, "곱해지는 값");
 	// 곱하는 값 입력
-	do
-	{
-		printf("\t| @ 곱하는 값 입력 (3자리수)\t: ");
-		return_value = input_number( multiply);
-	}
-	while(return_value != SUCCESS);
+	input_number( multiply, "곱하는 값");
 }
 
 /////////////////////////////////////////////////////
@@ -132,7 +130,7 @@ int main(){
 	// 곱하는 값의 현재 자리수
 	int current_multiply_column = 1;
 	// current_multiply 를 출력할 때 라인의 공백 관리
-	int current_print_space = 6;
+	int current_print_space = 5;
 	// 곱하는 값과 곱해지는 값을 곱한 값(최종 곱셈 값)
 	int total_result = 0;
 	// current_multiply 를 출력할 때의 출력 양식
@@ -145,6 +143,9 @@ int main(){
 
 	// 2. 곱셈을 실시하고, 중간 과정과 최종 결과를 출력한다.
 	printf("\n");
+	printf("	| @   %d\n", number);
+	printf("	| @ X %d\n", multiply);
+	printf("	| @ -----\n");
 	while (multiply != 0)
 	{
 		current_digit = multiply % 10;
@@ -156,7 +157,7 @@ int main(){
 		current_multiply_column *= 10;
 		multiply /= 10;
 	}
-	printf("	| @ ------\n");
+	printf("	| @ -----\n");
 	printf("	| @ %d\n\n", total_result);
 
 	return SUCCESS;
