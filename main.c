@@ -25,6 +25,7 @@ enum STATUS{
 int check_number_column( const int val);
 void input_number( int *val, char *msg);
 void input_numbers( int *number, int *multiply);
+void print_results( const int _number, const int _multiply);
 
 /**
  * @fn int check_number_column( const int val)
@@ -106,13 +107,15 @@ void input_numbers( int *number, int *multiply){
 }
 
 /**
- * @fn void print_results( const int number, const int multiply)
+ * @fn void print_results( const int _number, const int _multiply)
  * @brief 매개변수로 받은 두 숫자의 곱셈 중간 과정과 결과를 출력하는 함수
  * @param number 곱해지는 값
  * @param multiply 곱하는 값
  * @return 반환값 없음
  */
-void print_results( int number, int multiply){
+void print_results( const int _number, const int _multiply){
+	int number = _number;
+	int multiply = _multiply;
 	// 곱하는 값의 현재 자리수의 숫자
 	int current_digit = 0;
 	// 곱하는값의 현재 자리수의 숫자와 곱해지는 값과 곱한 값
