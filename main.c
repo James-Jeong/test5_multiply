@@ -22,17 +22,17 @@ enum STATUS{
 // Local functions
 /////////////////////////////////////////////////////
 
-int check_column( const int val);
+int check_number_column( const int val);
 void input_number( int *val, char *msg);
 void input_numbers( int *number, int *multiply);
 
 /**
- * @fn int check_column( const int val)
+ * @fn int check_number_column( const int val)
  * @brief 숫자의 자리수를 검사하는 함수, 기존에 입력 자리수가 정해져 있다.
  * @param val 입력받은 정수
  * @return 정수의 자리수가 지정된 자리수와 동일하면 SUCCESS, 아니면 FAIL 반환
  */
-int check_column( const int val){
+int check_number_column( const int val){
 	int temp_val = val;
 	int return_value = FAIL;
 	int column_count = 0;
@@ -76,7 +76,7 @@ void input_number( int *val, char *msg){
 			continue;
 		}
 	
-		return_value_column = check_column( *val);
+		return_value_column = check_number_column( *val);
 		if( return_value_column == FAIL){
 			printf("\t| ! 입력 오류, 자리수 불일치.\n");
 		}
@@ -105,17 +105,14 @@ void input_numbers( int *number, int *multiply){
 	input_number( multiply, "곱하는 값");
 }
 
-/////////////////////////////////////////////////////
-// Main function
-/////////////////////////////////////////////////////
 /**
- * @fn int main()
- * @brief 두 숫자를 입력받아 곱셈 중간 과정과 결과를 출력하는 프로그램
- * @return SUCCESS
+ * @fn void print_results( const int number, const int multiply)
+ * @brief 매개변수로 받은 두 숫자의 곱셈 중간 과정과 결과를 출력하는 함수
+ * @param number 곱해지는 값
+ * @param multiply 곱하는 값
+ * @return 반환값 없음
  */
-int main(){
-	// 곱해지는 값, 곱하는 값
-	int number = 0, multiply = 0;
+void print_results( int number, int multiply){
 	// 곱하는 값의 현재 자리수의 숫자
 	int current_digit = 0;
 	// 곱하는값의 현재 자리수의 숫자와 곱해지는 값과 곱한 값
@@ -129,12 +126,6 @@ int main(){
 	// current_multiply 를 출력할 때의 출력 양식
 	char print_format[32] ={0,};
 
-	// 1. 곱셈에 사용될 두 숫자를 입력받는다.
-	printf("\n\t| @ 곱셈 출력 프로그램\n");
-	printf("\t| @ (세자리수의 두 숫자 곱셈)\n\n");
-	input_numbers( &number, &multiply);
-
-	// 2. 곱셈을 실시하고, 중간 과정과 최종 결과를 출력한다.
 	printf("\n");
 	printf("	| @   %d\n", number);
 	printf("	| @ X %d\n", multiply);
@@ -152,7 +143,26 @@ int main(){
 	}
 	printf("	| @ -----\n");
 	printf("	| @ %d\n\n", total_result);
-
-	return SUCCESS;
 }
 
+/////////////////////////////////////////////////////
+// Main function
+/////////////////////////////////////////////////////
+
+/**
+ * @fn int main()
+ * @brief 두 숫자를 입력받아 곱셈 중간 과정과 결과를 출력하는 프로그램
+ * @return 반환값 없음
+ */
+void main(){
+	// 곱해지는 값, 곱하는 값
+	int number = 0, multiply = 0;
+
+	// 1. 곱셈에 사용될 두 숫자를 입력받는다.
+	printf("\n\t| @ 곱셈 출력 프로그램\n");
+	printf("\t| @ (세자리수의 두 숫자 곱셈)\n\n");
+	input_numbers( &number, &multiply);
+
+	// 2. 곱셈을 실시하고, 중간 과정과 최종 결과를 출력한다.
+	print_results( number, multiply);
+}
